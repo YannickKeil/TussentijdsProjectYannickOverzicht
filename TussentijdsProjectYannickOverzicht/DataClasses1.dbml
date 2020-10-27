@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="Projectweek Yannick" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=DESKTOP-9F59D6N\MSSQLSERVER01;Initial Catalog=&quot;Projectweek Yannick&quot;;Integrated Security=True" SettingsObjectName="TussentijdsProjectYannickOverzicht.Properties.Settings" SettingsPropertyName="Projectweek_YannickConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.AdminRechten" Member="AdminRechtens">
+    <Type Name="AdminRechten">
+      <Column Name="AdminRechtenID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="titel" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Association Name="AdminRechten_Personeelslid" Member="Personeelslids" ThisKey="AdminRechtenID" OtherKey="AdminRechtenID" Type="Personeelslid" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Bestelling" Member="Bestellings">
+    <Type Name="Bestelling">
+      <Column Name="BestellingID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="DatumOpgemaakt" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="PersoneelslidID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LeverancierID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="KlantID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="DatumVerzending" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="DatumAankomst" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Association Name="Bestelling_BestellingProduct" Member="BestellingProducts" ThisKey="BestellingID" OtherKey="BestellingID" Type="BestellingProduct" />
+      <Association Name="Klant_Bestelling" Member="Klant" ThisKey="KlantID" OtherKey="KlantID" Type="Klant" IsForeignKey="true" />
+      <Association Name="Leverancier_Bestelling" Member="Leverancier" ThisKey="LeverancierID" OtherKey="LeverancierID" Type="Leverancier" IsForeignKey="true" />
+      <Association Name="Personeelslid_Bestelling" Member="Personeelslid" ThisKey="PersoneelslidID" OtherKey="PersoneelslidID" Type="Personeelslid" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BestellingProduct" Member="BestellingProducts">
+    <Type Name="BestellingProduct">
+      <Column Name="BestellingProductID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="BestellingID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AantalProtuctBesteld" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Bestelling_BestellingProduct" Member="Bestelling" ThisKey="BestellingID" OtherKey="BestellingID" Type="Bestelling" IsForeignKey="true" />
+      <Association Name="Product_BestellingProduct" Member="Product" ThisKey="ProductID" OtherKey="ProductID" Type="Product" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Categorie" Member="Categories">
+    <Type Name="Categorie">
+      <Column Name="CategorieID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CategorieNaam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Categorie_Product" Member="Products" ThisKey="CategorieID" OtherKey="CategorieID" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Klant" Member="Klants">
+    <Type Name="Klant">
+      <Column Name="KlantID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Voornaam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Achternaam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Straatnaam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Huisnummer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Bus" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Postcode" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Gemeente" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Telefoonnummer" Type="System.String" DbType="NVarChar(24) NOT NULL" CanBeNull="false" />
+      <Column Name="Emailadres" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="AangemaaktOp" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Opmerking" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Association Name="Klant_Bestelling" Member="Bestellings" ThisKey="KlantID" OtherKey="KlantID" Type="Bestelling" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Leverancier" Member="Leveranciers">
+    <Type Name="Leverancier">
+      <Column Name="LeverancierID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Contactpersoon" Type="System.String" DbType="NVarChar(MAX)" CanBeNull="true" />
+      <Column Name="Telefoonnummer" Type="System.String" DbType="NVarChar(24) NOT NULL" CanBeNull="false" />
+      <Column Name="Emailadres" Type="System.String" DbType="NVarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Straatnaam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Huisnummer" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Bus" Type="System.String" DbType="NVarChar(10)" CanBeNull="true" />
+      <Column Name="Postcode" Type="System.String" DbType="NVarChar(10) NOT NULL" CanBeNull="false" />
+      <Column Name="Gemeente" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Leverancier_Bestelling" Member="Bestellings" ThisKey="LeverancierID" OtherKey="LeverancierID" Type="Bestelling" />
+      <Association Name="Leverancier_Product" Member="Products" ThisKey="LeverancierID" OtherKey="LeverancierID" Type="Product" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Personeelslid" Member="Personeelslids">
+    <Type Name="Personeelslid">
+      <Column Name="PersoneelslidID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Voornaam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Achternaam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Wachtwoord" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="AdminRechtenID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Salt" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Username" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Indiensttreding" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="GeboorteDatum" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Personeelslid_Bestelling" Member="Bestellings" ThisKey="PersoneelslidID" OtherKey="PersoneelslidID" Type="Bestelling" />
+      <Association Name="AdminRechten_Personeelslid" Member="AdminRechten" ThisKey="AdminRechtenID" OtherKey="AdminRechtenID" Type="AdminRechten" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Product" Member="Products">
+    <Type Name="Product">
+      <Column Name="ProductID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Naam" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Marge" Type="System.Decimal" DbType="Decimal(8,3) NOT NULL" CanBeNull="false" />
+      <Column Name="Eenheid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="BTW" Type="System.Decimal" DbType="Decimal(5,2) NOT NULL" CanBeNull="false" />
+      <Column Name="LeverancierID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CategorieID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AantalOpVooraad" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="AantalNaBesteld" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AantalBesteld" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AantalBeschikbaar" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="AankoopPrijs" Type="System.Decimal" DbType="Decimal(8,2) NOT NULL" CanBeNull="false" />
+      <Association Name="Product_BestellingProduct" Member="BestellingProducts" ThisKey="ProductID" OtherKey="ProductID" Type="BestellingProduct" />
+      <Association Name="Categorie_Product" Member="Categorie" ThisKey="CategorieID" OtherKey="CategorieID" Type="Categorie" IsForeignKey="true" />
+      <Association Name="Leverancier_Product" Member="Leverancier" ThisKey="LeverancierID" OtherKey="LeverancierID" Type="Leverancier" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

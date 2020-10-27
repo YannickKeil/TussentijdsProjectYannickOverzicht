@@ -1,0 +1,71 @@
+﻿<Window x:Class="TussentijdsProjectYannickOverzicht.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TussentijdsProjectYannickOverzicht"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <StackPanel>
+        <TabControl x:Name="TabOverzicht"  SelectionChanged="TabOverzicht_SelectionChanged">
+            <TabItem Header="Personeellid" x:Name="tabPersoneellid">
+                <DataGrid x:Name="dgPersoneel" Width="auto" ColumnWidth="*" MinColumnWidth="100" IsManipulationEnabled="True"/>
+            </TabItem>
+            <TabItem Header="Klant" x:Name="tabKlant" >
+                <DataGrid x:Name="dgKlant" Width="auto" ColumnWidth="*" MinColumnWidth="100" IsManipulationEnabled="False"/>
+            </TabItem>
+            <TabItem Header="Leverancier" x:Name="tabLeveranciern" >
+                <DataGrid x:Name="dgLeverancier" Width="auto" ColumnWidth="*" MinColumnWidth="100" IsManipulationEnabled="False"/>
+            </TabItem>
+            <TabItem Header="Bestellingen" x:Name="tabBestellingen" >
+                <ListView x:Name="ListViewBestellingen" MinWidth="750" Width="auto">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Bestellings Nummer" DisplayMemberBinding="{Binding BestellingsNummer}" />
+                            <GridViewColumn Header="Datum Opmaak" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Text="{Binding DateOpmaak}"  IsEnabled="False"></DatePicker>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Personeelslid" DisplayMemberBinding="{Binding Personeel}" />
+                            <GridViewColumn Header="Producten" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <ListBox ItemsSource="{Binding Producten }" Width="250" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+        </TabControl>
+        <ListView x:Name="Bestelgeschiedenis" MinWidth="750" Width="auto">
+        <ListView.View>
+            <GridView>
+                <GridViewColumn Header="Klant/Leverancier" x:Name="BestelGesKlantLeverancier" DisplayMemberBinding="{Binding KlantLeverancierTest}" />
+                <GridViewColumn Header="Bestellings Nummer" DisplayMemberBinding="{Binding BestellingsNummer}" />
+                <GridViewColumn Header="Datum Opmaak" >
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <DatePicker Text="{Binding DateOpmaak}"  IsEnabled="False"></DatePicker>
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+                <GridViewColumn Header="Personeelslid" DisplayMemberBinding="{Binding Personeel}" />
+                <GridViewColumn Header="Producten" >
+                    <GridViewColumn.CellTemplate>
+                        <DataTemplate>
+                            <ListBox ItemsSource="{Binding Producten }" Width="250" />
+                        </DataTemplate>
+                    </GridViewColumn.CellTemplate>
+                </GridViewColumn>
+            </GridView>
+        </ListView.View>
+        </ListView>
+        </StackPanel>
+    </Grid>
+</Window>
