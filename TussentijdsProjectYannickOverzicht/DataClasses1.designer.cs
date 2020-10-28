@@ -1974,7 +1974,7 @@ namespace TussentijdsProjectYannickOverzicht
 		private EntityRef<Categorie> _Categorie;
 		
 		private EntityRef<Leverancier> _Leverancier;
-		
+        
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -2011,9 +2011,19 @@ namespace TussentijdsProjectYannickOverzicht
 			this._Categorie = default(EntityRef<Categorie>);
 			this._Leverancier = default(EntityRef<Leverancier>);
 			OnCreated();
+
 		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+        public double Netto()
+        {
+            double netto = Convert.ToDouble(_AankoopPrijs) * (1 + (Convert.ToDouble(_Marge) / 100));
+            return Math.Round(netto,2);
+        }
+		public double Bruto()
+        {
+            double brutto = (Convert.ToDouble(_AankoopPrijs) * (1 + (Convert.ToDouble(_Marge) / 100))) * (1 + (Convert.ToDouble(_BTW) / 100));
+			return Math.Round(brutto, 2);
+        }
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int ProductID
 		{
 			get

@@ -7,21 +7,134 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <ScrollViewer>
         <StackPanel>
         <TabControl x:Name="TabOverzicht"  SelectionChanged="TabOverzicht_SelectionChanged">
             <TabItem Header="Personeellid" x:Name="tabPersoneellid">
-                <DataGrid x:Name="dgPersoneel" Width="auto" ColumnWidth="*" MinColumnWidth="100" IsManipulationEnabled="True"/>
-            </TabItem>
+                        <ListView x:Name="lvPersoneel" MinWidth="750" Width="auto" IsManipulationEnabled="False" SelectionChanged="lvPersoneel_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Voornaam" DisplayMemberBinding="{Binding Voornaam}" />
+                                    <GridViewColumn Header="Achternaam" DisplayMemberBinding="{Binding Achternaam}" />
+                                    <GridViewColumn Header="Admin Recht" DisplayMemberBinding="{Binding AdminRecht}" />
+                                    <GridViewColumn Header="Username" DisplayMemberBinding="{Binding Username}" />
+                                    <GridViewColumn Header="Datum Intreding" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <DatePicker Text="{Binding DatumIntreding}" IsEnabled="False"></DatePicker>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Geboortedatum" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <DatePicker Text="{Binding Geboortedatum}"  IsEnabled="False"></DatePicker>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </TabItem>
             <TabItem Header="Klant" x:Name="tabKlant" >
-                <DataGrid x:Name="dgKlant" Width="auto" ColumnWidth="*" MinColumnWidth="100" IsManipulationEnabled="False"/>
-            </TabItem>
+                        <ListView x:Name="lvKlant" MinWidth="750" Width="auto" SelectionChanged="lvKlant_SelectionChanged">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Voornaam" DisplayMemberBinding="{Binding Voornaam}" />
+                                    <GridViewColumn Header="Achternaam" DisplayMemberBinding="{Binding Achternaam}" />
+                                    <GridViewColumn Header="Straatnaam" DisplayMemberBinding="{Binding Straatnaam}"/>
+                                    <GridViewColumn Header="Huisnummer" DisplayMemberBinding="{Binding Huisnummer}" />
+                                    <GridViewColumn Header="Bus" DisplayMemberBinding="{Binding Bus}" />
+                                    <GridViewColumn Header="Postcode" DisplayMemberBinding="{Binding Poscode}" />
+                                    <GridViewColumn Header="Gemeente" DisplayMemberBinding="{Binding Gemeente}"/>
+                                    <GridViewColumn Header="Telefoonnummer" DisplayMemberBinding="{Binding Telefoon}" />
+                                    <GridViewColumn Header="e-mail">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock ><Hyperlink Command="" NavigateUri="{Binding Emailadress}" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Text="{Binding Emailadress}"/></Hyperlink></TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Datum Account aanmaak" >
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <DatePicker Text="{Binding AangemaaktOp}"  IsEnabled="False"></DatePicker>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="k.Opmerking" DisplayMemberBinding="{Binding Opmerking}" />
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </TabItem>
             <TabItem Header="Leverancier" x:Name="tabLeveranciern" >
-                <DataGrid x:Name="dgLeverancier" Width="auto" ColumnWidth="*" MinColumnWidth="100" IsManipulationEnabled="False"/>
-            </TabItem>
+                        <ListView x:Name="lvLeverancier" MinWidth="750" Width="auto">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Bestellings Nummer" DisplayMemberBinding="{Binding Contactpersoon}" />
+                                    <GridViewColumn Header="Straatnaam" DisplayMemberBinding="{Binding Straatnaam}"/>
+                                    <GridViewColumn Header="Huisnummer" DisplayMemberBinding="{Binding Huisnummer}" />
+                                    <GridViewColumn Header="Bus" DisplayMemberBinding="{Binding Bus}" />
+                                    <GridViewColumn Header="Gemeente" DisplayMemberBinding="{Binding Gemeente}"/>
+                                    <GridViewColumn Header="Postcode" DisplayMemberBinding="{Binding Poscode}" />
+                                    <GridViewColumn Header="Telefoonnummer" DisplayMemberBinding="{Binding Telefoon}" />
+                                    <GridViewColumn Header="e-mail">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock ><Hyperlink Command="" NavigateUri="{Binding Emailadress}" RequestNavigate="Hyperlink_RequestNavigate"><TextBlock Text="{Binding Emailadress}"/></Hyperlink></TextBlock>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </TabItem>
             <TabItem Header="Bestellingen" x:Name="tabBestellingen" >
-                <ListView x:Name="ListViewBestellingen" MinWidth="750" Width="auto">
+                <ListView x:Name="lvBestellingen" MinWidth="750" Width="auto">
                     <ListView.View>
                         <GridView>
+                                    <GridViewColumn Header="Bestellings Nummer" DisplayMemberBinding="{Binding BestellingsNummer}" Width="Auto"/>
+                                    <GridViewColumn Header="Datum Opmaak" >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <DatePicker Text="{Binding DateOpmaak}"  IsEnabled="False"></DatePicker>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Personeelslid" DisplayMemberBinding="{Binding Personeel}" />
+                                    <GridViewColumn Header="Producten" >
+                                        <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                                <ListView x:Name="lvProducten" MinWidth="750" Width="auto" ItemsSource="{Binding Producten}">
+                                                    <ListView.View>
+                                                        <GridView>
+                                                            <GridViewColumn Header="Aantal" DisplayMemberBinding="{Binding AantalProducten}" />
+                                                            <GridViewColumn Header="Naam" DisplayMemberBinding="{Binding ProductNaam}" />
+                                                            <GridViewColumn Header="Eenheid" DisplayMemberBinding="{Binding ProductEenheid}" />
+                                                            <GridViewColumn Header="Exc. BTW" DisplayMemberBinding="{Binding Netto}" />
+                                                            <GridViewColumn Header="Inc. BTW" DisplayMemberBinding="{Binding Brutto}" />
+                                                        </GridView>
+                                                    </ListView.View>
+                                                </ListView>
+                                            </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                                    <GridViewColumn Header="Klant" DisplayMemberBinding="{Binding KlantNaam}" Width="Auto"/>
+                                    <GridViewColumn Header="Leverancier" DisplayMemberBinding="{Binding LeverancierContact}" Width="Auto"/>
+                                </GridView>
+                    </ListView.View>
+                </ListView>
+            </TabItem>
+                <TabItem Header="Producten" x:Name="tabProducten" >
+                </TabItem>
+                <TabItem Header="Categories" x:Name="tabCategories" >
+                </TabItem>
+            </TabControl>
+                <ListView x:Name="Bestelgeschiedenis" MinWidth="750" Width="auto" HorizontalAlignment="Stretch" Height="auto">
+        <ListView.View>
+            <GridView>
+                            <GridViewColumn Header="Klant/Leverancier/Personeelslid" x:Name="BestelGesKlantLeverancierPersoneelslid" DisplayMemberBinding="{Binding KlantLeverancierPersoneelslid}" />
                             <GridViewColumn Header="Bestellings Nummer" DisplayMemberBinding="{Binding BestellingsNummer}" />
                             <GridViewColumn Header="Datum Opmaak" >
                                 <GridViewColumn.CellTemplate>
@@ -34,38 +147,24 @@
                             <GridViewColumn Header="Producten" >
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
-                                        <ListBox ItemsSource="{Binding Producten }" Width="250" />
+                                        <ListView x:Name="lvProducten" MinWidth="750" Width="auto" ItemsSource="{Binding Producten}">
+                                            <ListView.View>
+                                                <GridView>
+                                                    <GridViewColumn Header="Aantal" DisplayMemberBinding="{Binding AantalProducten}" />
+                                                    <GridViewColumn Header="Naam" DisplayMemberBinding="{Binding ProductNaam}" />
+                                                    <GridViewColumn Header="Eenheid" DisplayMemberBinding="{Binding ProductEenheid}" />
+                                                    <GridViewColumn Header="Exc. BTW" DisplayMemberBinding="{Binding Netto}" />
+                                                    <GridViewColumn Header="Inc. BTW" DisplayMemberBinding="{Binding Brutto}" />
+                                                </GridView>
+                                            </ListView.View>
+                                        </ListView>
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
                         </GridView>
-                    </ListView.View>
-                </ListView>
-            </TabItem>
-        </TabControl>
-        <ListView x:Name="Bestelgeschiedenis" MinWidth="750" Width="auto">
-        <ListView.View>
-            <GridView>
-                <GridViewColumn Header="Klant/Leverancier" x:Name="BestelGesKlantLeverancier" DisplayMemberBinding="{Binding KlantLeverancierTest}" />
-                <GridViewColumn Header="Bestellings Nummer" DisplayMemberBinding="{Binding BestellingsNummer}" />
-                <GridViewColumn Header="Datum Opmaak" >
-                    <GridViewColumn.CellTemplate>
-                        <DataTemplate>
-                            <DatePicker Text="{Binding DateOpmaak}"  IsEnabled="False"></DatePicker>
-                        </DataTemplate>
-                    </GridViewColumn.CellTemplate>
-                </GridViewColumn>
-                <GridViewColumn Header="Personeelslid" DisplayMemberBinding="{Binding Personeel}" />
-                <GridViewColumn Header="Producten" >
-                    <GridViewColumn.CellTemplate>
-                        <DataTemplate>
-                            <ListBox ItemsSource="{Binding Producten }" Width="250" />
-                        </DataTemplate>
-                    </GridViewColumn.CellTemplate>
-                </GridViewColumn>
-            </GridView>
         </ListView.View>
         </ListView>
         </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>
