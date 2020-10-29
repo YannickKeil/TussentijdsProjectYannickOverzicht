@@ -40,7 +40,19 @@ namespace TussentijdsProjectYannickOverzicht
             lvBestellingen.ItemsSource = bestellingen.ToList();
 
             
+            var productenOverview = dc.Products.Select(p => new { TotaalVerkocht = dc.BestellingProducts.Where(bp => bp.ProductID == p.ProductID && bp.Bestelling.KlantID != null).Select(bp => bp.AantalProtuctBesteld).Sum(), WinstPerProduct = p.Winst(), ProductID = p.ProductID, Naam = p.Naam, Marge = p.Marge, Eenheid = p.Eenheid, BTW = p.BTW, LeverancierNaam = p.Leverancier.Contactpersoon, CategorieNaam = p.Categorie.CategorieNaam, AantalOpVooraad = p.AantalOpVooraad,AankoopPrijs =p.AankoopPrijs , Netto = p.Netto() , Brutto = p.Bruto() }).ToList();
+            
+            foreach (var item in productenOverview)
+            {
+                POverview.Add(new ProductenOverview(item.ProductID, item.Naam, item.Marge, item.Eenheid, item.BTW, item.LeverancierNaam, item.CategorieNaam, item.AantalOpVooraad, item.AankoopPrijs, item.Netto, item.Brutto, item.WinstPerProduct, item.WinstPerProduct * item.TotaalVerkocht, item.TotaalVerkocht));
+            }
             //BestelGesKlantLeverancier.Header = "Klant";
+            lvProducten.SelectedValuePath = "ProductID";
+            lvProducten.ItemsSource = productenOverview.ToList();
+
+            //var Category = dc.Categories.Select(c => new { ID = c.CategorieID, Name = c.CategorieNaam });
+            //lvCategories.SelectedValuePath = "ID";
+            //lvCategories.ItemsSource = Category.ToList();
             lvPersoneel.SelectedIndex = 0;
         }
 
@@ -73,6 +85,14 @@ namespace TussentijdsProjectYannickOverzicht
                     lvLeverancier.SelectedIndex = 1;
                     lvLeverancier.SelectedIndex = 0;
                 }
+                //else if (TabOverzicht.SelectedIndex == 5)
+                //{
+                //    Bestelgeschiedenis.Visibility = Visibility.Visible;
+                //    BestelGesKlantLeverancierPersoneelslid.Header = "Categorie";
+                //    Bestelgeschiedenis.ItemsSource = null;
+                //    lvCategories.SelectedIndex = 1;
+                //    lvCategories.SelectedIndex = 0;
+                //}
                 else
                 {
                     Bestelgeschiedenis.Visibility = Visibility.Hidden;
@@ -86,7 +106,7 @@ namespace TussentijdsProjectYannickOverzicht
         {
 
             Bestelgeschiedenis.ItemsSource = null;
-            var bestellingen1 = dc.BestellingProducts.Where(bp => bp.Bestelling.PersoneelslidID == (int)lvPersoneel.SelectedValue).Select(bp => new { KlantLeverancierPersoneelslid = bp.Bestelling.Personeelslid.Voornaam + " " + bp.Bestelling.Personeelslid.Achternaam, BestellingsNummer = bp.BestellingID, DateOpmaak = bp.Bestelling.DatumOpgemaakt.ToShortDateString(), Personeel = bp.Bestelling.Personeelslid.Voornaam + " " + bp.Bestelling.Personeelslid.Achternaam, Producten = dc.BestellingProducts.Where(x => x.BestellingID == bp.BestellingID).Select(x => new { AantalProducten = x.AantalProtuctBesteld, ProductNaam = x.Product.Naam, ProductEenheid = x.Product.Eenheid, Netto = $"€ {x.Product.Netto()}", Brutto = $"€ {x.Product.Bruto()}" }).ToList() }).GroupBy(x => x.BestellingsNummer);
+            var bestellingen1 = dc.BestellingProducts.Where(bp => bp.Bestelling.PersoneelslidID == (int)lvPersoneel.SelectedValue).Select(bp => new { KlantLeverancierPersoneelslid = bp.Bestelling.Personeelslid.Voornaam + " " + bp.Bestelling.Personeelslid.Achternaam, BestellingsNummer = bp.BestellingID, DateOpmaak = bp.Bestelling.DatumOpgemaakt.ToShortDateString(), Personeel = bp.Bestelling.Personeelslid.Voornaam + " " + bp.Bestelling.Personeelslid.Achternaam, Producten = dc.BestellingProducts.Where(x => x.BestellingID == bp.BestellingID).Select(x => new { AantalProducten = x.AantalProtuctBesteld, ProductNaam = x.Product.Naam, ProductEenheid = x.Product.Eenheid, Netto = $"€ {x.Product.Netto()}", Brutto = $"€ {x.Product.Bruto()}", AankoopPrijs = x.Product.AankoopPrijs }).ToList() }).GroupBy(x => x.BestellingsNummer);
 
             Bestelgeschiedenis.ItemsSource = bestellingen1.ToList();
 
@@ -95,9 +115,22 @@ namespace TussentijdsProjectYannickOverzicht
         private void lvKlant_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Bestelgeschiedenis.ItemsSource = null;
-            var bestellingen2 = dc.BestellingProducts.Where(bp => bp.Bestelling.KlantID == (int)lvKlant.SelectedValue).Select(bp => new { KlantLeverancierPersoneelslid = bp.Bestelling.Klant.Voornaam + " " + bp.Bestelling.Klant.Achternaam, BestellingsNummer = bp.BestellingID, DateOpmaak = bp.Bestelling.DatumOpgemaakt.ToShortDateString(), Personeel = bp.Bestelling.Personeelslid.Voornaam + " " + bp.Bestelling.Personeelslid.Achternaam, Producten = dc.BestellingProducts.Where(x => x.BestellingID == bp.BestellingID).Select(x => new { AantalProducten = x.AantalProtuctBesteld, ProductNaam = x.Product.Naam, ProductEenheid = x.Product.Eenheid, Netto = $"€ {x.Product.Netto()}", Brutto = $"€ {x.Product.Bruto()}" }).ToList() }).GroupBy(x => x.BestellingsNummer);
+            var bestellingen2 = dc.BestellingProducts.Where(bp => bp.Bestelling.KlantID == (int)lvKlant.SelectedValue).Select(bp => new { KlantLeverancierPersoneelslid = bp.Bestelling.Klant.Voornaam + " " + bp.Bestelling.Klant.Achternaam, BestellingsNummer = bp.BestellingID, DateOpmaak = bp.Bestelling.DatumOpgemaakt.ToShortDateString(), Personeel = bp.Bestelling.Personeelslid.Voornaam + " " + bp.Bestelling.Personeelslid.Achternaam, Producten = dc.BestellingProducts.Where(x => x.BestellingID == bp.BestellingID).Select(x => new { AantalProducten = x.AantalProtuctBesteld, ProductNaam = x.Product.Naam, ProductEenheid = x.Product.Eenheid, Netto = $"€ {x.Product.Netto()}", Brutto = $"€ {x.Product.Bruto()}", AankoopPrijs = x.Product.AankoopPrijs }).ToList() }).GroupBy(x => x.BestellingsNummer);
             Bestelgeschiedenis.ItemsSource = bestellingen2.ToList();
         }
+        private void lvLeverancier_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Bestelgeschiedenis.ItemsSource = null;
+            var bestellingen2 = dc.BestellingProducts.Where(bp => bp.Bestelling.LeverancierID == (int)lvLeverancier.SelectedValue).Select(bp => new { KlantLeverancierPersoneelslid = bp.Bestelling.Leverancier.Contactpersoon, BestellingsNummer = bp.BestellingID, DateOpmaak = bp.Bestelling.DatumOpgemaakt.ToShortDateString(), Personeel = bp.Bestelling.Personeelslid.Voornaam + " " + bp.Bestelling.Personeelslid.Achternaam, Producten = dc.BestellingProducts.Where(x => x.BestellingID == bp.BestellingID).Select(x => new { AantalProducten = x.AantalProtuctBesteld, ProductNaam = x.Product.Naam, ProductEenheid = x.Product.Eenheid, Netto = $"€ {x.Product.Netto()}", Brutto = $"€ {x.Product.Bruto()}" ,AankoopPrijs = x.Product.AankoopPrijs}).ToList() }).GroupBy(x => x.BestellingsNummer);
+            Bestelgeschiedenis.ItemsSource = bestellingen2.ToList();
+        }
+        //private void lvCategories_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    Bestelgeschiedenis.ItemsSource = null;
+        //    var bestellingen2 = dc.BestellingProducts.Where(bp => bp.Product.CategorieID == (int)lvCategories.SelectedValue).Select(bp => new { KlantLeverancierPersoneelslid = bp.Product.Categorie.CategorieNaam, BestellingsNummer = bp.BestellingID, DateOpmaak = bp.Bestelling.DatumOpgemaakt.ToShortDateString(), Personeel = bp.Bestelling.Personeelslid.Voornaam + " " + bp.Bestelling.Personeelslid.Achternaam, Producten = dc.BestellingProducts.Where(x => x.BestellingID == bp.BestellingID).Select(x => new { AantalProducten = x.AantalProtuctBesteld, ProductNaam = x.Product.Naam, ProductEenheid = x.Product.Eenheid, Netto = $"€ {x.Product.Netto()}", Brutto = $"€ {x.Product.Bruto()}" }).ToList() }).GroupBy(x => x.BestellingsNummer);
+
+        //    Bestelgeschiedenis.ItemsSource = bestellingen2.ToList();
+        //}
 
         private void Hyperlink_RequestNavigate(object sender, RequestNavigateEventArgs e)
         {
@@ -106,5 +139,42 @@ namespace TussentijdsProjectYannickOverzicht
             Process.Start(myUri.AbsoluteUri);
             e.Handled = true;
         }
+        List<ProductenOverview> POverview = new List<ProductenOverview>();
+        public class ProductenOverview
+        {
+            int ProductIDPO { get; set; }
+            string NaamPO { get; set; }
+            decimal MargePO { get; set; }
+            string EenheidPO { get; set; }
+            decimal BTWPO { get; set; }
+            string LeverancierContact { get; set; }
+            string CategorieNaam{get;set;}
+            int AantalOpVooraadPO { get; set; }
+            decimal AankoopPrijsPO { get; set; }
+            double NettoPO { get; set; }
+            double BrutoPO { get; set; }
+            double WinstePerEenheid { get; set; }
+            double TotaalWinst { get; set; }
+            int TotaalVerkocht { get; set; }
+
+            public ProductenOverview(int productIDPO, string naamPO, decimal margePO, string eenheidPO, decimal bTWPO, string leverancierContact, string categorieNaam, int aantalOpVooraadPO, decimal aankoopPrijsPO, double nettoPO, double brutoPO, double winstePerEenheid, double totaalWinst, int totaalVerkocht)
+            {
+                ProductIDPO = productIDPO;
+                NaamPO = naamPO;
+                MargePO = margePO;
+                EenheidPO = eenheidPO;
+                BTWPO = bTWPO;
+                LeverancierContact = leverancierContact;
+                CategorieNaam = categorieNaam;
+                AantalOpVooraadPO = aantalOpVooraadPO;
+                AankoopPrijsPO = aankoopPrijsPO;
+                NettoPO = nettoPO;
+                BrutoPO = brutoPO;
+                WinstePerEenheid = winstePerEenheid;
+                TotaalWinst = totaalWinst;
+                TotaalVerkocht = totaalVerkocht;
+            }
+        }
+
     }
 }

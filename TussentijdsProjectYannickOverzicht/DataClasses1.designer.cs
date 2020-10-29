@@ -660,6 +660,12 @@ namespace TussentijdsProjectYannickOverzicht
 			this._Product = default(EntityRef<Product>);
 			OnCreated();
 		}
+		//public int TotalWinst()
+  //      {
+		//	int totalWinst = _Product.Entity.Winst() * _AantalProtuctBesteld;
+		//	return totalWinst;
+
+		//}
 		
 		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BestellingProductID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int BestellingProductID
@@ -2023,7 +2029,12 @@ namespace TussentijdsProjectYannickOverzicht
             double brutto = (Convert.ToDouble(_AankoopPrijs) * (1 + (Convert.ToDouble(_Marge) / 100))) * (1 + (Convert.ToDouble(_BTW) / 100));
 			return Math.Round(brutto, 2);
         }
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public double Winst()
+        {
+			double winst = Math.Round(Convert.ToDouble(_AankoopPrijs) * (1 + (Convert.ToDouble(_Marge) / 100)),2) - Convert.ToDouble(_AankoopPrijs);
+			return winst;
+        }
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ProductID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public int ProductID
 		{
 			get
